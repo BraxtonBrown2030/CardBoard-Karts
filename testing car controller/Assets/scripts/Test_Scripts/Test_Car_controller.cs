@@ -1,8 +1,7 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Chat_car_controller : MonoBehaviour
+public class Test_Car_controller : MonoBehaviour
 {
     [Header("Suspension Settings")]
     public float springStrength = 8000f;
@@ -27,10 +26,10 @@ public class Chat_car_controller : MonoBehaviour
      * 
      * car controller default settings
      *                  inspector / script
-     * spring stiffness: 800 / 8000
-     * damping: 80 / 1500
+     * spring stiffness: 100 / 8000
+     * damping: 50 / 1500
      * rest length: 1 / 0.5
-     * max suspension length: 1.5 / 1
+     * max suspension length: 1 / 1
      *
      * ground layer: drivable / drivable
      *
@@ -67,26 +66,20 @@ public class Chat_car_controller : MonoBehaviour
 
             if (compression > 0)
             {
-                float springForce = springStrength * compression;
-                float velocity = Vector3.Dot(rb.GetPointVelocity(wheel.position), -transform.up);
-                float dampingForce = damping * velocity;
-
-                Vector3 totalForce = (springForce + dampingForce) * transform.up;
-                rb.AddForceAtPosition(totalForce, wheel.position);
+                Vector3 desiredPosition = wheel.position + transform.up * compression;
+                wheel.position = desiredPosition;
 
                 if (debugRay)
                     Debug.DrawRay(wheel.position, -transform.up * hit.distance, Color.green);
 
-                // Debug.Log($"Wheel: {wheel.name}, Compression: {compression}, Total Force: {totalForce}");
+                // Debug.Log($"Wheel: {wheel.name}, Compression: {compression}, Desired Position: {desiredPosition}");
             }
         }
         else
         {
-            if(debugRay)
+            if (debugRay)
             {
                 Debug.DrawRay(wheel.position, -transform.up * maxSuspensionLength, Color.red);
-                rb.mass = 40;
-                return;
             }
         }
     }
