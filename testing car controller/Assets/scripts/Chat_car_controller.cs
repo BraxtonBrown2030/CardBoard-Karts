@@ -64,7 +64,7 @@ public class Chat_car_controller : MonoBehaviour
         {
             float distance = hit.distance;
             float compression = restLength - distance;
-
+            
             if (compression > 0)
             {
                 float springForce = springStrength * compression;
